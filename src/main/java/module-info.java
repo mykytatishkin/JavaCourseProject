@@ -3,6 +3,7 @@ module com.example.marketcourseprojectfx {
     requires javafx.fxml;
 
     requires org.kordamp.bootstrapfx.core;
+    requires java.sql;
 
     opens com.example.marketcourseprojectfx to javafx.fxml;
     exports com.example.marketcourseprojectfx;

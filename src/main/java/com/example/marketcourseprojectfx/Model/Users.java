@@ -7,13 +7,13 @@ public class Users {
     public String Role;
     public int ShopId;
 
-    public Users(int id,String username, String password, String role)
+    public Users(int id,String username, String password, String role, int shopId)
     {
         Id = id;
         Username = username;
         Password = password;
         Role = role;
-
+        ShopId = shopId;
     }
 
 }
