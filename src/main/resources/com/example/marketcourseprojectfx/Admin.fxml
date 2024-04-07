@@ -32,13 +32,14 @@
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <ListView fx:id="ProductListAdmin" layoutX="14.0" layoutY="14.0" onMouseClicked="#loadProductData" prefHeight="341.0" prefWidth="388.0" />
-                        <Button layoutX="416.0" layoutY="303.0" mnemonicParsing="false" onAction="#AddProduct" text="Add" />
-                        <Button layoutX="467.0" layoutY="303.0" mnemonicParsing="false" onAction="#UpdateProduct" text="Update" />
-                        <Button layoutX="532.0" layoutY="303.0" mnemonicParsing="false" onAction="#DeleteProduct" text="Delete" />
+                        <Button layoutX="416.0" layoutY="333.0" mnemonicParsing="false" onAction="#AddProduct" text="Add" />
+                        <Button layoutX="474.0" layoutY="333.0" mnemonicParsing="false" onAction="#UpdateProduct" text="Update" />
+                        <Button layoutX="534.0" layoutY="333.0" mnemonicParsing="false" onAction="#DeleteProduct" text="Delete" />
                         <TextField fx:id="ProductTitleField" layoutX="416.0" layoutY="26.0" prefHeight="25.0" prefWidth="172.0" promptText="Title" />
                         <TextArea fx:id="ProductDescriptionField" layoutX="416.0" layoutY="61.0" prefHeight="154.0" prefWidth="173.0" promptText="Description" />
-                        <TextField fx:id="ProductQuantityField" layoutX="416.0" layoutY="225.0" prefHeight="25.0" prefWidth="173.0" promptText="Quantity" />
-                        <TextField fx:id="ProductWeightField" layoutX="416.0" layoutY="260.0" prefHeight="25.0" prefWidth="171.0" promptText="Shop Owner" />
+                        <TextField fx:id="ProductQuantityField" layoutX="416.0" layoutY="281.0" prefHeight="25.0" prefWidth="173.0" promptText="Quantity" />
+                        <TextField fx:id="OwnerIdField" layoutX="417.0" layoutY="307.0" prefHeight="25.0" prefWidth="171.0" promptText="Shop Owner" />
+                        <TextField fx:id="ProductPriceField" layoutX="416.0" layoutY="255.0" prefHeight="25.0" prefWidth="173.0" promptText="Price" />
                      </children>
                   </AnchorPane>
                </content>

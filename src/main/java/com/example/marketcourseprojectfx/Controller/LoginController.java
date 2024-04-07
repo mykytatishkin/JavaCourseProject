@@ -73,7 +73,6 @@ public class LoginController {
 
     public void SignUp(ActionEvent actionEvent) {
         try {
-            System.out.println("!!!!!! SignUpButtonPressed");
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("SignUp.fxml"));
             Parent root = fxmlLoader.load();
             Stage stage = new Stage();

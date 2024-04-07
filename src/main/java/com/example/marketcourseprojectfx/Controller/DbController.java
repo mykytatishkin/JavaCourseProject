@@ -1,5 +1,6 @@
 package com.example.marketcourseprojectfx.Controller;
 
+import com.example.marketcourseprojectfx.Model.Product;
 import com.example.marketcourseprojectfx.Model.Users;
 
 import java.sql.*;
@@ -130,8 +131,7 @@ public class DbController {
 
     public ResultSet getAllProducts() {
         ResultSet resultSet = null;
-        String sql = "SELECT Name FROM Product";
-
+        String sql = "SELECT * FROM Product"; // Выбираем все поля из таблицы "Product"
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             resultSet = statement.executeQuery();
@@ -141,6 +141,53 @@ public class DbController {
 
         return resultSet;
     }
+    public void addProduct(Product product) {
+        String sql = "INSERT INTO Product (Name, Description, Price, Quantity, OwnerId) VALUES (?, ?, ?, ?, ?)";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, product.getName());
+            statement.setString(2, product.getDescription());
+            statement.setDouble(3, product.getPrice());
+            statement.setInt(4, product.getQuantity());
+            statement.setInt(5, product.getOwnerId());
+
+            statement.executeUpdate();
+            System.out.println("Product added successfully.");
+        } catch (SQLException e) {
+            System.err.println("Error while adding product to the database: " + e.getMessage());
+        }
+    }
+    public void updateProduct(Product product) {
+        String sql = "UPDATE Product SET Name=?, Description=?, Quantity=?, OwnerId=? WHERE Id=?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, product.getName());
+            statement.setString(2, product.getDescription());
+            statement.setInt(3, product.getQuantity());
+            statement.setInt(4, product.getOwnerId());
+            statement.setInt(5, product.getId());
+
+            statement.executeUpdate();
+            System.out.println("Product updated successfully.");
+        } catch (SQLException e) {
+            System.err.println("Error while updating product: " + e.getMessage());
+        }
+    }
+
+
+    public void deleteProduct(int productId) {
+        String sql = "DELETE FROM Product WHERE Id=?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, productId);
+
+            statement.executeUpdate();
+            System.out.println("Product deleted successfully.");
+        } catch (SQLException e) {
+            System.err.println("Error while deleting product: " + e.getMessage());
+        }
+    }
+
 
     public ResultSet getAllUsers() {
         ResultSet resultSet = null;
@@ -202,6 +249,7 @@ public class DbController {
             System.err.println("Error while deleting user: " + e.getMessage());
         }
     }
+
 
 
 }
