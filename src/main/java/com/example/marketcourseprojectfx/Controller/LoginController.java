@@ -22,7 +22,7 @@ public class LoginController {
     private DbController dbController = new DbController();
 
     public void initialize() {
-        dbController.Connect(); // Подключение к базе данных при инициализации контроллера
+        dbController.Connect();
     }
 
     public void Login(ActionEvent actionEvent) {
@@ -58,7 +58,6 @@ public class LoginController {
                     stage.setScene(new Scene(root));
                     stage.show();
 
-                    // Закройте предыдущее окно входа
                     ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -79,7 +78,6 @@ public class LoginController {
             stage.setScene(new Scene(root));
             stage.show();
 
-            // Закройте предыдущее окно входа
             ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
         } catch (IOException e) {
             e.printStackTrace();

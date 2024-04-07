@@ -55,7 +55,7 @@ public class SignUpController
                 errorTitleSignUp.setText("User with this username already exists");
                 return;
             }
-            Users user = new Users(0, username, password, "user", 1); // По умолчанию роль "user" и пустой ShopId
+            Users user = new Users(0, username, password, "user", 1);
 
             dbController.addUser(user);
 
