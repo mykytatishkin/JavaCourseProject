@@ -45,6 +45,42 @@ public class AdminController {
         loadShopData();
         loadProductData();
         loadUserData();
+
+
+        ListViewUsersAdmin.setOnMouseClicked(event -> {
+            // Получаем выбранную запись
+            String selectedItem = (String) ListViewUsersAdmin.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                // Разбиваем строку на части, разделенные запятой
+                String[] parts = selectedItem.split(",");
+                // Устанавливаем значения из частей строки в текстовые поля
+                for (String part : parts) {
+                    // Разбиваем часть на ключ и значение
+                    String[] keyValue = part.trim().split(":");
+                    // Извлекаем имя параметра и его значение
+                    String key = keyValue[0].trim();
+                    String value = keyValue[1].trim();
+                    // Устанавливаем значение в соответствующее текстовое поле
+                    switch (key) {
+                        case "Id":
+                            // Пропускаем, если это Id, так как мы не хотим его редактировать
+                            break;
+                        case "Username":
+                            LoginField.setText(value);
+                            break;
+                        case "Password":
+                            PasswordField.setText(value);
+                            break;
+                        case "Role":
+                            RoleField.setText(value);
+                            break;
+                        case "ShopId":
+                            ShopId.setText(value);
+                            break;
+                    }
+                }
+            }
+        });
     }
 
 
@@ -98,6 +134,7 @@ public class AdminController {
     }
 
     // UserTab
+    // TODO: Add role as choose from UserType
     private void loadUserData() {
         ObservableList<String> userItems = FXCollections.observableArrayList();
         ResultSet resultSet = dbController.getAllUsers();
@@ -127,13 +164,86 @@ public class AdminController {
     }
 
     public void CreateButton(ActionEvent actionEvent) {
+        String username = LoginField.getText();
+        String password = PasswordField.getText();
+        String role = RoleField.getText();
+        int shopId = Integer.parseInt(ShopId.getText());
+
+        // Создаем объект пользователя без указания id
+        Users user = new Users(username, password, role, shopId);
+        // Вызываем метод создания пользователя в контроллере базы данных
+        dbController.createUser(user);
+        // После создания пользователя обновляем список пользователей
+        loadUserData();
     }
 
+
+
     public void UpdateButton(ActionEvent actionEvent) {
+        // Получаем выбранную запись
+        String selectedItem = (String) ListViewUsersAdmin.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            // Разбиваем строку на части, разделенные запятой
+            String[] parts = selectedItem.split(",");
+            int id = -1; // Идентификатор пользователя
+            for (String part : parts) {
+                // Разбиваем часть на ключ и значение
+                String[] keyValue = part.trim().split(":");
+                // Извлекаем имя параметра и его значение
+                String key = keyValue[0].trim();
+                String value = keyValue[1].trim();
+                // Если ключ - "Id", получаем значение идентификатора пользователя
+                if (key.equals("Id")) {
+                    id = Integer.parseInt(value);
+                    break;
+                }
+            }
+            // Если удалось получить идентификатор пользователя, обновляем его данные в базе данных
+            if (id != -1) {
+                String username = LoginField.getText();
+                String password = PasswordField.getText();
+                String role = RoleField.getText();
+                int shopId = Integer.parseInt(ShopId.getText());
+
+                // Создаем объект пользователя с новыми данными
+                Users user = new Users(id, username, password, role, shopId);
+                // Обновляем данные пользователя в базе данных
+                dbController.updateUser(user);
+                // После обновления данных обновляем список пользователей
+                loadUserData();
+            }
+        }
     }
 
     public void DeleteButton(ActionEvent actionEvent) {
+        // Получаем выбранную запись из ListView
+        String selectedItem = (String) ListViewUsersAdmin.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            // Разбиваем строку на части, разделенные запятой
+            String[] parts = selectedItem.split(",");
+            int id = -1; // Идентификатор пользователя
+            for (String part : parts) {
+                // Разбиваем часть на ключ и значение
+                String[] keyValue = part.trim().split(":");
+                // Извлекаем имя параметра и его значение
+                String key = keyValue[0].trim();
+                String value = keyValue[1].trim();
+                // Если ключ - "Id", получаем значение идентификатора пользователя
+                if (key.equals("Id")) {
+                    id = Integer.parseInt(value);
+                    break;
+                }
+            }
+            // Если удалось получить идентификатор пользователя, удаляем его из базы данных
+            if (id != -1) {
+                // Удаляем пользователя из базы данных
+                dbController.deleteUser(id);
+                // После удаления обновляем список пользователей
+                loadUserData();
+            }
+        }
     }
+
 
 
 

@@ -5,9 +5,15 @@ public class Users {
     private String username;
     private String password;
     private String role;
-    private int shopId; // Добавлено поле для идентификатора магазина
+    private Integer shopId; // Используем Integer для ShopId, чтобы он мог быть null
 
-    public Users(int id, String username, String password, String role, int shopId) {
+    public Users(String username, String password, String role, int shopId) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.shopId = shopId;
+    }
+    public Users(int id, String username, String password, String role, Integer shopId) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -48,14 +54,11 @@ public class Users {
         this.role = role;
     }
 
-    public int getShopId() {
+    public Integer getShopId() {
         return shopId;
     }
 
-    public void setShopId(int shopId) {
+    public void setShopId(Integer shopId) {
         this.shopId = shopId;
     }
-
-
 }
-

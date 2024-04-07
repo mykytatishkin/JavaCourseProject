@@ -155,18 +155,53 @@ public class DbController {
 
         return resultSet;
     }
-    public void updateUser(Users user) {
-        String sql = "UPDATE Users SET Username = ?, Password = ?, Role = ?, ShopId = ? WHERE Id = ?";
+    public void createUser(Users user) {
+        String sql = "INSERT INTO Users (Username, Password, Role, ShopId) VALUES (?, ?, ?, ?)";
+
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getPassword());
             statement.setString(3, user.getRole());
             statement.setInt(4, user.getShopId());
-            statement.setInt(5, user.getId()); // Предполагая, что Id - это тип int в базе данных
+
             statement.executeUpdate();
+            System.out.println("User created successfully.");
         } catch (SQLException e) {
-            System.err.println("Error while updating user in the database: " + e.getMessage());
+            System.err.println("Error while creating user: " + e.getMessage());
         }
     }
+    public void updateUser(Users user) {
+        String sql = "UPDATE Users SET Username=?, Password=?, Role=?, ShopId=? WHERE Id=?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getPassword());
+            statement.setString(3, user.getRole());
+            statement.setInt(4, user.getShopId());
+            statement.setInt(5, user.getId());
+
+            statement.executeUpdate();
+            System.out.println("User updated successfully.");
+        } catch (SQLException e) {
+            System.err.println("Error while updating user: " + e.getMessage());
+        }
+    }
+    public void deleteUser(int userId) {
+        String sql = "DELETE FROM Users WHERE Id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, userId);
+            int rowsAffected = statement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("User with ID " + userId + " has been deleted successfully.");
+            } else {
+                System.out.println("No user found with ID " + userId + ".");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error while deleting user: " + e.getMessage());
+        }
+    }
+
 
 }
