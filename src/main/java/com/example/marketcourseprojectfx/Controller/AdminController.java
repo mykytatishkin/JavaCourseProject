@@ -1,12 +1,20 @@
 package com.example.marketcourseprojectfx.Controller;
 
+import com.example.marketcourseprojectfx.HelloApplication;
 import com.example.marketcourseprojectfx.Model.Product;
 import com.example.marketcourseprojectfx.Model.Shop;
 import com.example.marketcourseprojectfx.Model.Users;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -176,7 +184,6 @@ public class AdminController {
             loadShopData();
         }
     }
-
 
     public void loadProductData() {
         ObservableList<String> productItems = FXCollections.observableArrayList();
@@ -361,5 +368,16 @@ public class AdminController {
                 loadUserData();
             }
         }
+    }
+
+    public void LogOut(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("Login.fxml"));
+        Parent root = fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
+
+        // Закройте предыдущее окно входа
+        ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
     }
 }

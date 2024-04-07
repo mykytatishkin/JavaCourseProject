@@ -23,6 +23,7 @@
                         <TextField fx:id="ShopAddressField" layoutX="347.0" layoutY="63.0" prefHeight="25.0" prefWidth="239.0" promptText="Shop Address" />
                         <TextField fx:id="ShopNameField" layoutX="347.0" layoutY="27.0" prefHeight="25.0" prefWidth="239.0" promptText="Shop Name" />
                         <TextField fx:id="ShopEmailField" layoutX="347.0" layoutY="101.0" prefHeight="25.0" prefWidth="239.0" promptText="Shop Email" />
+                        <Button layoutX="525.0" layoutY="395.0" mnemonicParsing="false" onAction="#LogOut" text="Log Out" />
                      </children>
                   </AnchorPane>
                </content>
@@ -40,6 +41,7 @@
                         <TextField fx:id="ProductQuantityField" layoutX="416.0" layoutY="281.0" prefHeight="25.0" prefWidth="173.0" promptText="Quantity" />
                         <TextField fx:id="OwnerIdField" layoutX="417.0" layoutY="307.0" prefHeight="25.0" prefWidth="171.0" promptText="Shop Owner" />
                         <TextField fx:id="ProductPriceField" layoutX="416.0" layoutY="255.0" prefHeight="25.0" prefWidth="173.0" promptText="Price" />
+                        <Button layoutX="14.0" layoutY="400.0" mnemonicParsing="false" onAction="#LogOut" text="Log Out" />
                      </children>
                   </AnchorPane>
                </content>
@@ -57,6 +59,7 @@
                         <TextField fx:id="RoleField" layoutX="350.0" layoutY="369.0" prefHeight="26.0" prefWidth="100.0" promptText="Role" />
                         <TextField fx:id="ShopId" layoutX="459.0" layoutY="369.0" prefHeight="26.0" prefWidth="100.0" promptText="RoleId" />
                         <ListView fx:id="ListViewUsersAdmin" layoutX="2.0" prefHeight="364.0" prefWidth="600.0" />
+                        <Button layoutX="459.0" layoutY="409.0" mnemonicParsing="false" onAction="#LogOut" text="Log Out" />
                      </children>
                   </AnchorPane>
                </content>
