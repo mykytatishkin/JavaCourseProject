@@ -55,5 +55,7 @@ public class Users {
     public void setShopId(int shopId) {
         this.shopId = shopId;
     }
+
+
 }
 

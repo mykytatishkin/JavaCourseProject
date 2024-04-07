@@ -144,7 +144,7 @@ public class DbController {
 
     public ResultSet getAllUsers() {
         ResultSet resultSet = null;
-        String sql = "SELECT Username FROM Users";
+        String sql = "SELECT * FROM Users";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -155,4 +155,18 @@ public class DbController {
 
         return resultSet;
     }
+    public void updateUser(Users user) {
+        String sql = "UPDATE Users SET Username = ?, Password = ?, Role = ?, ShopId = ? WHERE Id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getPassword());
+            statement.setString(3, user.getRole());
+            statement.setInt(4, user.getShopId());
+            statement.setInt(5, user.getId()); // Предполагая, что Id - это тип int в базе данных
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error while updating user in the database: " + e.getMessage());
+        }
+    }
+
 }

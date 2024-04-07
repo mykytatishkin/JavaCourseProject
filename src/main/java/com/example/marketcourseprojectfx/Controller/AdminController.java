@@ -1,11 +1,13 @@
 package com.example.marketcourseprojectfx.Controller;
 
+import com.example.marketcourseprojectfx.Model.Users;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-
+import javafx.scene.control.cell.TextFieldTableCell;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -25,20 +27,18 @@ public class AdminController {
     public TextField ProductQuantityField;
     public TextField ProductWeightField;
     // UserTab
-    public TableView UserTable;
-    public TableColumn UserIdColumn;
-    public TableColumn UserLoginColumn;
-    public TableColumn UserPasswordColumn;
-    public TableColumn UserRoleColumn;
-    public TableColumn UserShopIdColumn;
     public TextField LoginField;
     public TextField PasswordField;
     public Button CreateButton;
     public Button UpdateButton;
     public Button DeleteButton;
     public Button LoadButton;
-
+    public ListView ListViewUsersAdmin;
+    public TextField RoleField;
+    public TextField ShopId;
     private final DbController dbController = new DbController();
+
+
 
     public void initialize() {
         dbController.Connect(); // Подключаемся к базе данных при инициализации контроллера
@@ -103,11 +103,18 @@ public class AdminController {
         ResultSet resultSet = dbController.getAllUsers();
         try {
             while (resultSet.next()) {
+                int id = resultSet.getInt("Id");
                 String username = resultSet.getString("Username");
+                String password = resultSet.getString("Password");
                 String role = resultSet.getString("Role");
-                userItems.add(username + " (" + role + ")");
+                int shopId = resultSet.getInt("ShopId");
+
+                String userString = "Id: " + id + ", Username: " + username + ", Password: " + password + ", Role: " + role + ", ShopId: " + shopId;
+                userItems.add(userString);
             }
-            UserTable.setItems(userItems);
+            // Устанавливаем список пользователей в ListView
+            // ShopList.setItems(userItems); // Необходимо заменить на ListView для пользователей
+            ListViewUsersAdmin.setItems(userItems);
         } catch (SQLException e) {
             e.printStackTrace();
             // Можно добавить отображение сообщения об ошибке пользователю
@@ -115,6 +122,7 @@ public class AdminController {
     }
 
     public void LoadDataButton(ActionEvent actionEvent) {
+        System.out.println("Load Button Clicked");
         loadUserData();
     }
 
