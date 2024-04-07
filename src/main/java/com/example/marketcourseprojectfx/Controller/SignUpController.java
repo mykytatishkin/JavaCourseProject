@@ -29,36 +29,27 @@ public class SignUpController
         String password = PasswordSignUpField.getText();
         String confirmPassword = ConfirmPasswordSignUpField.getText();
 
-        if (!password.equals(confirmPassword))
-        {
+        if (!password.equals(confirmPassword)) {
             errorTitleSignUp.setText("Password does not match Confirm Password");
             return;
         }
 
-        if (username.length() < 2)
-        {
+        if (username.length() < 2) {
             errorTitleSignUp.setText("Username should contain at least two characters");
             return;
         }
 
-        if (!AgreeWithPoliticsCheckBox.isSelected())
-        {
-            errorTitleSignUp.setText("Please agree with the politics");
+        if (!AgreeWithPoliticsCheckBox.isSelected()) {
+            errorTitleSignUp.setText("Please agree with the policies");
             return;
         }
-        // TODO: Validation of password
-        if (password.length() < 1 || confirmPassword.length() < 1)
-        {
-            errorTitleSignUp.setText("Password should contain more than 1 character");
+
+        if (password.length() < 2 || confirmPassword.length() < 2) {
+            errorTitleSignUp.setText("Password should contain at least 2 characters");
+            return;
         }
 
-        if (password != confirmPassword)
-        {
-            errorTitleSignUp.setText("Passwords do not match");
-        }
-
-        try
-        {
+        try {
             dbController.Connect();
             if (dbController.getUser(username) != null) {
                 errorTitleSignUp.setText("User with this username already exists");
@@ -76,23 +67,18 @@ public class SignUpController
             stage.setScene(new Scene(root));
             stage.show();
 
-            ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+            ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
 
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             errorTitleSignUp.setText("Error occurred during user registration");
             e.printStackTrace();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-        finally
-        {
+        } finally {
             dbController.Disconnect();
         }
     }
+
 
     public void HaveAnAccount(ActionEvent actionEvent) throws IOException
     {
