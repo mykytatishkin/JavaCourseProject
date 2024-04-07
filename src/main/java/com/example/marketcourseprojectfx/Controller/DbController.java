@@ -23,7 +23,6 @@ public class DbController {
             System.err.println("Error connecting to the database: " + e.getMessage());
         }
     }
-
     public void Disconnect() {
         try {
             if (connection != null && !connection.isClosed()) {
@@ -34,7 +33,6 @@ public class DbController {
             System.err.println("Error while disconnecting from the database: " + e.getMessage());
         }
     }
-
     public boolean checkUserCredentials(String username, String password) {
         boolean isValid = false;
         String sql = "SELECT * FROM Users WHERE Username = ? AND Password = ?";
@@ -143,7 +141,6 @@ public class DbController {
             System.err.println("Error while creating shop: " + e.getMessage());
         }
     }
-
     public void updateShop(String shopName, String shopAddress, String shopEmail, String selectedShopName) {
         String sql = "UPDATE Shop SET Name=?, Address=?, Email=? WHERE Name=?";
 
@@ -159,8 +156,6 @@ public class DbController {
             System.err.println("Error while updating shop: " + e.getMessage());
         }
     }
-
-
     public void deleteShop(String shopName) {
         String sql = "DELETE FROM Shop WHERE Name=?";
 
@@ -173,7 +168,6 @@ public class DbController {
             System.err.println("Error while deleting shop: " + e.getMessage());
         }
     }
-
 
     public ResultSet getAllProducts() {
         ResultSet resultSet = null;
@@ -292,7 +286,4 @@ public class DbController {
             System.err.println("Error while deleting user: " + e.getMessage());
         }
     }
-
-
-
 }
