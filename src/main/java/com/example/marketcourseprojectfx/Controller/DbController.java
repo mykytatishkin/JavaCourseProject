@@ -115,9 +115,10 @@ public class DbController {
             throw e; // Пробрасываем исключение дальше для обработки в контроллере
         }
     }
+
     public ResultSet getAllShops() {
         ResultSet resultSet = null;
-        String sql = "SELECT Name FROM Shop";
+        String sql = "SELECT * FROM Shop";
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -128,6 +129,51 @@ public class DbController {
 
         return resultSet;
     }
+    public void createShop(String shopName, String shopAddress, String shopEmail) {
+        String sql = "INSERT INTO Shop (Name, Address, Email) VALUES (?, ?, ?)";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, shopName);
+            statement.setString(2, shopAddress);
+            statement.setString(3, shopEmail);
+
+            statement.executeUpdate();
+            System.out.println("Shop created successfully.");
+        } catch (SQLException e) {
+            System.err.println("Error while creating shop: " + e.getMessage());
+        }
+    }
+
+    public void updateShop(String shopName, String shopAddress, String shopEmail, String selectedShopName) {
+        String sql = "UPDATE Shop SET Name=?, Address=?, Email=? WHERE Name=?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, shopName);
+            statement.setString(2, shopAddress);
+            statement.setString(3, shopEmail);
+            statement.setString(4, selectedShopName); // Указываем старое название магазина для поиска
+
+            statement.executeUpdate();
+            System.out.println("Shop updated successfully.");
+        } catch (SQLException e) {
+            System.err.println("Error while updating shop: " + e.getMessage());
+        }
+    }
+
+
+    public void deleteShop(String shopName) {
+        String sql = "DELETE FROM Shop WHERE Name=?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, shopName);
+
+            statement.executeUpdate();
+            System.out.println("Shop deleted successfully.");
+        } catch (SQLException e) {
+            System.err.println("Error while deleting shop: " + e.getMessage());
+        }
+    }
+
 
     public ResultSet getAllProducts() {
         ResultSet resultSet = null;
@@ -173,8 +219,6 @@ public class DbController {
             System.err.println("Error while updating product: " + e.getMessage());
         }
     }
-
-
     public void deleteProduct(int productId) {
         String sql = "DELETE FROM Product WHERE Id=?";
 
@@ -187,7 +231,6 @@ public class DbController {
             System.err.println("Error while deleting product: " + e.getMessage());
         }
     }
-
 
     public ResultSet getAllUsers() {
         ResultSet resultSet = null;

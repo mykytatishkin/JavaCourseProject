@@ -1,6 +1,7 @@
 package com.example.marketcourseprojectfx.Controller;
 
 import com.example.marketcourseprojectfx.Model.Product;
+import com.example.marketcourseprojectfx.Model.Shop;
 import com.example.marketcourseprojectfx.Model.Users;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -103,10 +104,20 @@ public class AdminController {
             }
         });
 
+        ShopList.setOnMouseClicked(event -> {
+            // Получаем выбранный магазин из списка
+            Shop selectedShop = (Shop) ShopList.getSelectionModel().getSelectedItem();
+            if (selectedShop != null) {
+                // Заполняем текстовые поля данными о выбранном магазине
+                ShopNameField.setText(selectedShop.getName());
+                ShopAddressField.setText(selectedShop.getAddress());
+                ShopEmailField.setText(selectedShop.getEmail());
+            }
+        });
     }
 
     private void loadShopData() {
-        ObservableList<String> shopItems = FXCollections.observableArrayList();
+        ObservableList<String> shopItems = FXCollections.observableArrayList(); // Изменение типа ObservableList
         ResultSet resultSet = dbController.getAllShops();
         try {
             while (resultSet.next()) {
@@ -120,13 +131,52 @@ public class AdminController {
     }
 
     public void CreateShop(ActionEvent actionEvent) {
+        String shopName = ShopNameField.getText();
+        String shopAddress = ShopAddressField.getText();
+        String shopEmail = ShopEmailField.getText();
+
+        // Вызываем метод createShop в dbController, передавая ему данные о магазине
+        dbController.createShop(shopName, shopAddress, shopEmail);
+
+        // Очищаем поля ввода после добавления магазина
+        ShopNameField.clear();
+        ShopAddressField.clear();
+        ShopEmailField.clear();
+
+        // Перезагружаем данные о магазинах
+        loadShopData();
     }
 
+    // TODO: Load data to fields on update
     public void UpdateShop(ActionEvent actionEvent) {
+        // Получаем выбранный магазин из списка
+        String selectedShopName = (String) ShopList.getSelectionModel().getSelectedItem();
+        if (selectedShopName != null) {
+            // Получаем новые значения для магазина из текстовых полей
+            String shopName = ShopNameField.getText();
+            String shopAddress = ShopAddressField.getText();
+            String shopEmail = ShopEmailField.getText();
+
+            // Вызываем метод для обновления магазина в базе данных
+            dbController.updateShop(shopName, shopAddress, shopEmail, selectedShopName);
+
+            // Перезагружаем данные о магазинах
+            loadShopData();
+        }
     }
 
     public void DeleteShop(ActionEvent actionEvent) {
+        // Получаем выбранный магазин из списка
+        String selectedShop = (String) ShopList.getSelectionModel().getSelectedItem();
+        if (selectedShop != null) {
+            // Удаляем выбранный магазин из базы данных
+            dbController.deleteShop(selectedShop);
+
+            // Перезагружаем данные о магазинах
+            loadShopData();
+        }
     }
+
 
     public void loadProductData() {
         ObservableList<String> productItems = FXCollections.observableArrayList();
@@ -150,7 +200,6 @@ public class AdminController {
             e.printStackTrace();
         }
     }
-
 
     public void AddProduct(ActionEvent actionEvent) {
         String productName = ProductTitleField.getText();
@@ -204,10 +253,6 @@ public class AdminController {
             loadProductData();
         }
     }
-
-
-
-
 
     public void DeleteProduct(ActionEvent actionEvent) {
         String selectedItem = (String) ProductListAdmin.getSelectionModel().getSelectedItem();
