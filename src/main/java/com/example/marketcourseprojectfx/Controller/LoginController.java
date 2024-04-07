@@ -10,7 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
+import com.example.marketcourseprojectfx.Model.Users;
 import java.io.IOException;
 
 public class LoginController {
@@ -19,19 +19,40 @@ public class LoginController {
     public Button LoginButton;
     public Button SignUpButton;
     public Label ErrorTitle;
+    private DbController dbController = new DbController();
+
+    public void initialize() {
+        dbController.Connect(); // Подключение к базе данных при инициализации контроллера
+    }
 
     public void Login(ActionEvent actionEvent) {
-        DbController dbController = new DbController();
-        dbController.Connect(); // Connect to the database
-
         String username = UsernameField.getText();
         String password = PasswordField.getText();
 
         if (username.length() > 1 && password.length() > 1) {
-            boolean isValidCredentials = dbController.checkUserCredentials(username, password);
-            if (isValidCredentials) {
+            Users user = dbController.getUser(username, password);
+
+            if (user != null) {
+                String role = user.getRole();
+                String fxmlPath = "";
+
+                switch (role) {
+                    case "admin":
+                        fxmlPath = "Admin.fxml";
+                        break;
+                    case "manager":
+                        fxmlPath = "Manager.fxml";
+                        break;
+                    case "user":
+                        fxmlPath = "User.fxml";
+                        break;
+                    default:
+                        ErrorTitle.setText("Invalid Role");
+                        return;
+                }
+
                 try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("Admin.fxml"));
+                    FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(fxmlPath));
                     Parent root = fxmlLoader.load();
                     Stage stage = new Stage();
                     stage.setScene(new Scene(root));
@@ -48,7 +69,22 @@ public class LoginController {
         } else {
             ErrorTitle.setText("Null Credentials");
         }
+    }
 
-        dbController.Disconnect(); // Disconnect from the database
+    public void SignUp(ActionEvent actionEvent) {
+        try {
+            System.out.println("!!!!!! SignUpButtonPressed");
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("SignUp.fxml"));
+            Parent root = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            // Закройте предыдущее окно входа
+            ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
+

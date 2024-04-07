@@ -1,5 +1,7 @@
 package com.example.marketcourseprojectfx.Controller;
 
+import com.example.marketcourseprojectfx.Model.Users;
+
 import java.sql.*;
 
 public class DbController {
@@ -11,9 +13,8 @@ public class DbController {
                     + "encrypt=true;"
                     + "trustServerCertificate=true;"
                     + "loginTimeout=30;";
-    private Connection connection; // Добавлено поле для хранения соединения
+    private Connection connection;
 
-    // Метод для подключения к базе данных
     public void Connect() {
         try {
             connection = DriverManager.getConnection(connectionUrl);
@@ -22,7 +23,6 @@ public class DbController {
         }
     }
 
-    // Метод для отключения от базы данных
     public void Disconnect() {
         try {
             if (connection != null && !connection.isClosed()) {
@@ -34,7 +34,6 @@ public class DbController {
         }
     }
 
-    // Method to check user credentials
     public boolean checkUserCredentials(String username, String password) {
         boolean isValid = false;
         String sql = "SELECT * FROM Users WHERE Username = ? AND Password = ?";
@@ -44,7 +43,7 @@ public class DbController {
             statement.setString(2, password);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    isValid = true; // Username and password match found in the database
+                    isValid = true;
                 }
             }
         } catch (SQLException e) {
@@ -52,5 +51,67 @@ public class DbController {
         }
 
         return isValid;
+    }
+
+    public Users getUser(String username, String password) {
+        Users user = null;
+        String sql = "SELECT * FROM Users WHERE Username = ? AND Password = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, username);
+            statement.setString(2, password);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    user = new Users(
+                            resultSet.getInt("Id"),
+                            resultSet.getString("Username"),
+                            resultSet.getString("Password"),
+                            resultSet.getString("Role"),
+                            resultSet.getInt("ShopId")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error while fetching user from the database: " + e.getMessage());
+        }
+        return user;
+    }
+    public Users getUser(String username) {
+        Users user = null;
+        String sql = "SELECT * FROM Users WHERE Username = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, username);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    user = new Users(
+                            resultSet.getInt("Id"),
+                            resultSet.getString("Username"),
+                            resultSet.getString("Password"),
+                            resultSet.getString("Role"),
+                            resultSet.getInt("ShopId")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error while fetching user from the database: " + e.getMessage());
+        }
+
+        return user;
+    }
+    public void addUser(Users user) throws SQLException {
+        String sql = "INSERT INTO Users (Username, Password, Role, ShopId) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getPassword());
+            statement.setString(3, user.getRole());
+            statement.setInt(4, user.getShopId());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error while adding user to the database: " + e.getMessage());
+            throw e; // Пробрасываем исключение дальше для обработки в контроллере
+        }
     }
 }

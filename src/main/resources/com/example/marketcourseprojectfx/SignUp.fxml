@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.marketcourseprojectfx.Controller.SignUpController">
+   <children>
+      <TextField fx:id="UsernameSignUpField" layoutX="220.0" layoutY="127.0" promptText="Username" />
+      <PasswordField fx:id="PasswordSignUpField" layoutX="220.0" layoutY="165.0" promptText="Password" />
+      <PasswordField fx:id="ConfirmPasswordSignUpField" layoutX="220.0" layoutY="200.0" promptText="Confirm Password" />
+      <CheckBox fx:id="AgreeWithPoliticsCheckBox" layoutX="220.0" layoutY="240.0" mnemonicParsing="false" text="Agree with Politics" />
+       <Button fx:id="SignUpButton" layoutX="270.0" layoutY="271.0" mnemonicParsing="false" onAction="#SignUp" text="Sign Up" />
+      <Label fx:id="errorTitleSignUp" layoutX="220.0" layoutY="95.0" />
+      <Button fx:id="HaveAnAccount" layoutX="203.0" layoutY="310.0" mnemonicParsing="false" onAction="#HaveAnAccount" style="-fx-background-color: fffff;" text="Already have an account? Log in" />
+       
+   </children>
+</AnchorPane>
