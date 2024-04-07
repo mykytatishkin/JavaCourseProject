@@ -114,4 +114,45 @@ public class DbController {
             throw e; // Пробрасываем исключение дальше для обработки в контроллере
         }
     }
+    public ResultSet getAllShops() {
+        ResultSet resultSet = null;
+        String sql = "SELECT Name FROM Shop";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            resultSet = statement.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Error fetching shop data: " + e.getMessage());
+        }
+
+        return resultSet;
+    }
+
+    public ResultSet getAllProducts() {
+        ResultSet resultSet = null;
+        String sql = "SELECT Name FROM Product";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            resultSet = statement.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Error fetching product data: " + e.getMessage());
+        }
+
+        return resultSet;
+    }
+
+    public ResultSet getAllUsers() {
+        ResultSet resultSet = null;
+        String sql = "SELECT Username FROM Users";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            resultSet = statement.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Error fetching user data: " + e.getMessage());
+        }
+
+        return resultSet;
+    }
 }
