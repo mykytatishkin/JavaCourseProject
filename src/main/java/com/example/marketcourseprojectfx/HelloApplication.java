@@ -11,11 +11,8 @@ import java.io.IOException;
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        DbController db = new DbController();
-        db.Connect();
-
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("Login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 500, 300);
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         stage.setScene(scene);
         stage.show();
     }
@@ -23,4 +20,5 @@ public class HelloApplication extends Application {
     public static void main(String[] args) {
         launch();
     }
+
 }

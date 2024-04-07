@@ -1,8 +1,6 @@
 package com.example.marketcourseprojectfx.Controller;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DbController {
     private String connectionUrl =
@@ -34,5 +32,25 @@ public class DbController {
         } catch (SQLException e) {
             System.err.println("Error while disconnecting from the database: " + e.getMessage());
         }
+    }
+
+    // Method to check user credentials
+    public boolean checkUserCredentials(String username, String password) {
+        boolean isValid = false;
+        String sql = "SELECT * FROM Users WHERE Username = ? AND Password = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, username);
+            statement.setString(2, password);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    isValid = true; // Username and password match found in the database
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error while checking user credentials: " + e.getMessage());
+        }
+
+        return isValid;
     }
 }
