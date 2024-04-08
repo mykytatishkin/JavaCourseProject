@@ -46,8 +46,14 @@ public class AdminController {
     public TextField ShopId;
 
     private Product selectedProduct; // Добавляем поле для хранения выбранного продукта
+    // Data Binding
+    private Users userData;
 
     private final DbController dbController = new DbController();
+
+    public void setUserData(Users user) {
+        this.userData = user;
+    }
 
     public void initialize() {
         dbController.Connect();

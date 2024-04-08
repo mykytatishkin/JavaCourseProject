@@ -1,6 +1,7 @@
 package com.example.marketcourseprojectfx.Controller;
 
 import com.example.marketcourseprojectfx.Model.Product;
+import com.example.marketcourseprojectfx.Model.Shop;
 import com.example.marketcourseprojectfx.Model.Users;
 
 import java.sql.*;
@@ -52,6 +53,39 @@ public class DbController {
         return isValid;
     }
 
+    // User.fxml
+
+
+    // Manager.fxml
+    public Shop getShopDataForUser(String username) {
+        Connect();
+        Shop shop = null;
+        try {
+            String query = "SELECT s.Id, s.Name, s.Address, s.Email " +
+                    "FROM Users u " +
+                    "JOIN Shop s ON u.ShopId = s.Id " +
+                    "WHERE u.Username = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int shopId = resultSet.getInt("Id");
+                String name = resultSet.getString("Name");
+                String address = resultSet.getString("Address");
+                String email = resultSet.getString("Email");
+                shop = new Shop(name, address, email);
+            }
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.err.println("Error retrieving shop data for user " + username + ": " + e.getMessage());
+        } finally {
+            Disconnect();
+        }
+        return shop;
+    }
+
+    // Admin.fxml
     public Users getUser(String username, String password) {
         Users user = null;
         String sql = "SELECT * FROM Users WHERE Username = ? AND Password = ?";

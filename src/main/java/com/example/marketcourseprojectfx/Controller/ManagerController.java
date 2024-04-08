@@ -1,6 +1,8 @@
 package com.example.marketcourseprojectfx.Controller;
 
 import com.example.marketcourseprojectfx.HelloApplication;
+import com.example.marketcourseprojectfx.Model.Shop;
+import com.example.marketcourseprojectfx.Model.Users;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -37,6 +39,31 @@ public class ManagerController {
     public TextField EmailField;
     public TextField PhoneField;
 
+    // Data Binding
+    private Users userData;
+
+    public void initialize() {
+        // Добавим проверку на null, чтобы избежать NullPointerException
+        if (userData != null) {
+            ShopTabDataLoad();
+        } else {
+            System.err.println("User data is null.");
+        }
+    }
+
+    public void ShopTabDataLoad() {
+        DbController db = new DbController();
+        Shop shopTab = new Shop(db.getShopDataForUser(userData.getUsername()).getName(), db.getShopDataForUser(userData.getUsername()).getAddress(), db.getShopDataForUser(userData.getUsername()).getEmail());
+
+        ShopNameField.setText(shopTab.getName());
+        ShopAddressField.setText(shopTab.getAddress());
+        ShopEmailField.setText(shopTab.getEmail());
+    }
+
+    public void setUserData(Users user) {
+        this.userData = user;
+    }
+
     public void LogOut(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("Login.fxml"));
         Parent root = fxmlLoader.load();
@@ -46,6 +73,7 @@ public class ManagerController {
 
         ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
     }
+
     // ShopTab
     public void UpdateShop(ActionEvent actionEvent) {
     }

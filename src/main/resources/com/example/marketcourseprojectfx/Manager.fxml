@@ -27,22 +27,30 @@
                     </content>
                 </Tab>
                 <Tab fx:id="productsTab" text="Products">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                            <children>
-                                <ListView fx:id="ProductListAdmin" layoutX="14.0" layoutY="14.0" onMouseClicked="#loadProductData" prefHeight="443.0" prefWidth="388.0" />
-                                <Button layoutX="415.0" layoutY="293.0" mnemonicParsing="false" onAction="#AddProduct" text="Add" />
-                                <Button layoutX="465.0" layoutY="293.0" mnemonicParsing="false" onAction="#UpdateProduct" text="Update" />
-                                <Button layoutX="533.0" layoutY="293.0" mnemonicParsing="false" onAction="#DeleteProduct" text="Delete" />
-                                <TextField fx:id="ProductTitleField" layoutX="413.0" layoutY="14.0" prefHeight="25.0" prefWidth="176.0" promptText="Title" />
-                                <TextArea fx:id="ProductDescriptionField" layoutX="415.0" layoutY="47.0" prefHeight="154.0" prefWidth="173.0" promptText="Description" />
-                                <TextField fx:id="ProductQuantityField" layoutX="415.0" layoutY="233.0" prefHeight="25.0" prefWidth="173.0" promptText="Quantity" />
-                                <TextField fx:id="OwnerIdField" layoutX="416.0" layoutY="259.0" prefHeight="25.0" prefWidth="171.0" promptText="Shop Owner" />
-                                <TextField fx:id="ProductPriceField" layoutX="415.0" layoutY="207.0" prefHeight="25.0" prefWidth="173.0" promptText="Price" />
-                                <Button layoutX="524.0" layoutY="427.0" mnemonicParsing="false" onAction="#LogOut" text="Log Out" />
-                            </children>
-                        </AnchorPane>
-                    </content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                            <ListView fx:id="ProductListAdmin" layoutX="14.0" layoutY="14.0"
+                                      onMouseClicked="#loadProductData" prefHeight="443.0" prefWidth="388.0"/>
+                            <Button layoutX="415.0" layoutY="293.0" mnemonicParsing="false" onAction="#AddProduct"
+                                    text="Add"/>
+                            <Button layoutX="465.0" layoutY="293.0" mnemonicParsing="false" onAction="#UpdateProduct"
+                                    text="Update"/>
+                            <Button layoutX="533.0" layoutY="293.0" mnemonicParsing="false" onAction="#DeleteProduct"
+                                    text="Delete"/>
+                            <TextField fx:id="ProductTitleField" layoutX="413.0" layoutY="14.0" prefHeight="25.0"
+                                       prefWidth="176.0" promptText="Title"/>
+                            <TextArea fx:id="ProductDescriptionField" layoutX="415.0" layoutY="47.0" prefHeight="154.0"
+                                      prefWidth="173.0" promptText="Description"/>
+                            <TextField fx:id="ProductQuantityField" layoutX="415.0" layoutY="233.0" prefHeight="25.0"
+                                       prefWidth="173.0" promptText="Quantity"/>
+                            <TextField fx:id="OwnerIdField" layoutX="416.0" layoutY="259.0" prefHeight="25.0"
+                                       prefWidth="171.0" promptText="Shop Owner"/>
+                            <TextField fx:id="ProductPriceField" layoutX="415.0" layoutY="207.0" prefHeight="25.0"
+                                       prefWidth="173.0" promptText="Price"/>
+                            <Button layoutX="524.0" layoutY="427.0" mnemonicParsing="false" onAction="#LogOut"
+                                    text="Log Out"/>
+                        </children>
+                    </AnchorPane>
                 </Tab>
                 <Tab fx:id="usersTab" text="Profile">
                     <content>

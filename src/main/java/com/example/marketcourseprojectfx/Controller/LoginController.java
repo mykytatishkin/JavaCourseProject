@@ -56,6 +56,23 @@ public class LoginController {
                     Parent root = fxmlLoader.load();
                     Stage stage = new Stage();
                     stage.setScene(new Scene(root));
+
+                    switch (fxmlPath)
+                    {
+                        case "Admin.fxml":
+                            AdminController adminController = fxmlLoader.getController();
+                            adminController.setUserData(user);
+                            break;
+                        case "Manager.fxml":
+                            ManagerController managerController = fxmlLoader.getController();
+                            managerController.setUserData(user);
+                            break;
+                        case "User.fxml":
+                            UserController userController = fxmlLoader.getController();
+                            userController.setUserData(user);
+                            break;
+                    }
+
                     stage.show();
 
                     ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
@@ -69,6 +86,7 @@ public class LoginController {
             ErrorTitle.setText("Null Credentials");
         }
     }
+
 
     public void SignUp(ActionEvent actionEvent) {
         try {
