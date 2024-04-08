@@ -5,6 +5,7 @@ public class Account extends Users{
     public String LastName;
     public String Email;
     public String Phone;
+    public int UserId;
 
     public Account(String firstName, String lastName, String email, String phone,String username, String password, String role, int shopId) {
         super(username, password, role, shopId);

@@ -286,7 +286,6 @@ public class AdminController {
             loadProductData();
         }
     }
-
     private void loadUserData() {
         ObservableList<String> userItems = FXCollections.observableArrayList();
         ResultSet resultSet = dbController.getAllUsers();
@@ -306,6 +305,7 @@ public class AdminController {
             e.printStackTrace();
         }
     }
+
 
     public void LoadDataButton(ActionEvent actionEvent) {
         loadUserData();
