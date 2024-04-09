@@ -60,18 +60,21 @@ public class ManagerController {
                 ShopAddressField.setText(shopTab.getAddress());
                 ShopEmailField.setText(shopTab.getEmail());
             } else {
+                System.out.println(userData);
                 System.out.println("User not found");
             }
         } else {
+            System.out.println(userData);
             System.out.println("UserData not found");
         }
     }
 
     public void setUserData(Users user) {
         if (user != null) {
-            this.userData = user;
+            userData = user;
         }
         else if (user == null) {
+            System.out.println(user);
             System.err.println("User data is null.");
         }
     }
