@@ -84,6 +84,35 @@ public class DbController {
         }
         return shop;
     }
+    public void updateShop(Shop shop) {
+        String sql = "UPDATE Shop SET Name=?, Address=?, Email=? WHERE Name=?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, shop.getName());
+            statement.setString(2, shop.getAddress());
+            statement.setString(3, shop.getEmail());
+            statement.setString(4, shop.getName()); // Используем текущее название магазина для поиска
+
+            statement.executeUpdate();
+            System.out.println("Shop updated successfully.");
+        } catch (SQLException e) {
+            System.err.println("Error while updating shop: " + e.getMessage());
+        }
+    }
+    public ResultSet getAllProductsByOwnerId(int ownerId) {
+        ResultSet resultSet = null;
+        String sql = "SELECT * FROM Product WHERE OwnerId = ?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, ownerId);
+            resultSet = statement.executeQuery();
+        } catch (SQLException e) {
+            System.err.println("Error fetching product data by owner ID: " + e.getMessage());
+        }
+
+        return resultSet;
+    }
 
     // Admin.fxml
     public Users getUser(String username, String password) {

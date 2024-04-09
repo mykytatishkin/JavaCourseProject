@@ -17,7 +17,12 @@ public class UserController {
     private Users userData;
 
     public void setUserData(Users user) {
-        this.userData = user;
+        if (user != null) {
+            this.userData = user;
+        }
+        else if (user == null) {
+            System.err.println("User data is null.");
+        }
     }
 
     public void LogOut(ActionEvent actionEvent) throws IOException {

@@ -52,7 +52,12 @@ public class AdminController {
     private final DbController dbController = new DbController();
 
     public void setUserData(Users user) {
-        this.userData = user;
+        if (user != null) {
+            this.userData = user;
+        }
+        else if (user == null) {
+            System.err.println("User data is null.");
+        }
     }
 
     public void initialize() {
