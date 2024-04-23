@@ -1,4 +1,5 @@
 package com.example.marketcourseprojectfx.Controller;
+import com.example.marketcourseprojectfx.Model.Comment;
 import com.example.marketcourseprojectfx.Model.Product;
 import com.example.marketcourseprojectfx.Model.Shop;
 import com.example.marketcourseprojectfx.Model.Users;
@@ -266,5 +267,25 @@ public class DbController {
             System.out.println("Ошибка при обновлении рейтинга продукта: " + e.getMessage());
         }
     }
+    public void saveComment(Comment comment) {
+        // SQL query to insert a comment into the database
+        String query = "INSERT INTO comment (productId, username, content) VALUES (?, ?, ?)";
 
+        try (Connection connection = DriverManager.getConnection(connectionUrl);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            // Set parameter values for the query
+            statement.setInt(1, comment.getProductId());
+            statement.setString(2, comment.getUsername());
+            statement.setString(3, comment.getContent());
+
+            // Execute the SQL query
+            statement.executeUpdate();
+
+            System.out.println("Comment successfully saved in the database.");
+
+        } catch (SQLException e) {
+            System.err.println("Error saving comment to the database: " + e.getMessage());
+        }
+    }
 }
