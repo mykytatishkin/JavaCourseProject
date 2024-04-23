@@ -1,12 +1,19 @@
 package com.example.marketcourseprojectfx.Controller;
 import com.example.marketcourseprojectfx.Extension.ChangePage;
+import com.example.marketcourseprojectfx.Model.Product;
+import com.example.marketcourseprojectfx.Model.Shop;
 import com.example.marketcourseprojectfx.Model.Users;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ListView;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
+
 
 public class UserController {
 
@@ -14,11 +21,53 @@ public class UserController {
     public ListView ProductList;
     // Data Binding
     private Users userData;
+    private DbController db = new DbController();
     private ChangePage cp = new ChangePage();
 
-    public void initialize() {
+    public void initialize() throws IOException {
         setUserDataFromTextFile();
+        LoadShops();
+        LoadProducts();
     }
+
+    public void LoadShops() throws IOException {
+        List<Shop> shops = db.GetAllShops();
+        List<String> shopNames = new ArrayList<>();
+
+        // Проход по списку магазинов и добавление их имен в список строк
+        for (Shop shop : shops) {
+            shopNames.add(shop.getName());
+        }
+
+        // Создание ObservableList из списка имен магазинов
+        ObservableList<String> shopNamesObservableList = FXCollections.observableArrayList(shopNames);
+
+        // Установка ObservableList с именами магазинов в элемент управления ListView
+        ShopList.setItems(shopNamesObservableList);
+    }
+
+    public void LoadProducts() throws IOException {
+        // Установка обработчика событий для ListView ShopList
+        ShopList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                // Загрузка продуктов для выбранного магазина
+                List<Product> products = db.GetProductsForShop((String) newValue); // Предположим, что у вас есть метод для получения продуктов по имени магазина
+                List<String> productNames = new ArrayList<>();
+
+                // Проход по списку продуктов и добавление их имен в список строк
+                for (Product product : products) {
+                    productNames.add(product.getName());
+                }
+
+                // Создание ObservableList из списка имен продуктов
+                ObservableList<String> productNamesObservableList = FXCollections.observableArrayList(productNames);
+
+                // Установка ObservableList с именами продуктов в элемент управления ListView
+                ProductList.setItems(productNamesObservableList);
+            }
+        });
+    }
+
 
     public void setUserDataFromTextFile() {
         try (BufferedReader reader = new BufferedReader(new FileReader("user.txt"))) {

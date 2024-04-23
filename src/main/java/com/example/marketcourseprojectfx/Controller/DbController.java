@@ -1,8 +1,13 @@
 package com.example.marketcourseprojectfx.Controller;
 import com.example.marketcourseprojectfx.Extension.ChangePage;
+import com.example.marketcourseprojectfx.Model.Product;
+import com.example.marketcourseprojectfx.Model.Shop;
 import com.example.marketcourseprojectfx.Model.Users;
 
+import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DbController {
     private String connectionUrl =
@@ -84,4 +89,59 @@ public class DbController {
             return false;
         }
     }
+
+    public List<Shop> GetAllShops() {
+        String query = "SELECT * FROM Shop";
+        List<Shop> shops = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(connectionUrl);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            // Process the result set
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String address = resultSet.getString("address");
+                String email = resultSet.getString("email");
+
+                // Create a new Shop object
+                Shop shop = new Shop(name, address, email);
+                shops.add(shop);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return shops;
+    }
+    public List<Product> GetProductsForShop(String shopName) {
+        List<Product> products = new ArrayList<>();
+        String query = "SELECT * FROM Product WHERE OwnerId IN (SELECT id FROM shop WHERE name = ?)";
+
+        try (Connection connection = DriverManager.getConnection(connectionUrl);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            // Установка параметра для имени магазина
+            statement.setString(1, shopName);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    // Получение данных о продуктах из результата запроса
+                    int id = resultSet.getInt("Id");
+                    String name = resultSet.getString("Name");
+                    String description = resultSet.getString("Description");
+                    int quantity = resultSet.getInt("Quantity");
+                    int ownerId = resultSet.getInt("OwnerId");
+
+                    // Создание объекта Product и добавление его в список
+                    Product product = new Product(name, description, quantity, ownerId);
+                    products.add(product);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return products;
+    }
+
 }

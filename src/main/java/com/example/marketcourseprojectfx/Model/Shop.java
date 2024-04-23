@@ -6,6 +6,7 @@ public class Shop {
     private String address;
     private String email;
 
+    public Shop() {}
     public Shop(String name, String address, String email) {
         this.name = name;
         this.address = address;
