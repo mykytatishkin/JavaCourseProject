@@ -7,10 +7,10 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.marketcourseprojectfx.Controller.UserController">
    <children>
       <Button layoutX="531.0" layoutY="353.0" mnemonicParsing="false" onAction="#LogOut" text="Log Out" />
-      <ListView layoutX="7.0" layoutY="23.0" prefHeight="355.0" prefWidth="260.0" />
-      <ListView layoutX="267.0" layoutY="23.0" prefHeight="355.0" prefWidth="260.0" />
-      <Button layoutX="535.0" layoutY="23.0" mnemonicParsing="false" text="Buy" />
-      <Button layoutX="535.0" layoutY="56.0" mnemonicParsing="false" text="Rate" />
-      <Button layoutX="535.0" layoutY="90.0" mnemonicParsing="false" text="Text To" />
+      <ListView fx:id="ShopList" layoutX="7.0" layoutY="23.0" prefHeight="355.0" prefWidth="260.0" />
+      <ListView fx:id="ProductList" layoutX="267.0" layoutY="23.0" prefHeight="355.0" prefWidth="260.0" />
+      <Button layoutX="543.0" layoutY="23.0" mnemonicParsing="false" onAction="#BuyItem" text="Buy" />
+      <Button layoutX="541.0" layoutY="56.0" mnemonicParsing="false" onAction="#RateItem" text="Rate" />
+      <Button layoutX="527.0" layoutY="89.0" mnemonicParsing="false" onAction="#CommentItem" text="Comment" />
    </children>
 </AnchorPane>

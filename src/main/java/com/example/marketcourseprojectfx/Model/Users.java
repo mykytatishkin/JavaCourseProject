@@ -7,6 +7,7 @@ public class Users {
     private String role;
     private Integer shopId; // Используем Integer для ShopId, чтобы он мог быть null
 
+    public Users() {}
     public Users(int id, String username, String password, String role, int shopId) {
         this.id = id;
         this.username = username;

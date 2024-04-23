@@ -18,6 +18,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,8 +38,43 @@ public class ManagerController {
     public TextField OwnerIdField;
     public TextField ProductPriceField;
 
+    // Data Binding
+    private Users userData;
     private ChangePage cp = new ChangePage();
 
+    public void initialize() {
+        setUserDataFromTextFile();
+    }
+
+    public void setUserDataFromTextFile() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("user.txt"))) {
+            String line;
+            userData = new Users(); // Создаем новый объект Users для userData
+            while ((line = reader.readLine()) != null) {
+                // Разбиваем строку на части по ":"
+                String[] parts = line.split(":");
+                if (parts.length == 2) {
+                    String key = parts[0].trim();
+                    String value = parts[1].trim();
+                    switch (key) {
+                        case "Username":
+                            userData.setUsername(value);
+                            break;
+                        case "Role":
+                            userData.setRole(value);
+                            break;
+                        case "ShopId":
+                            userData.setShopId(Integer.parseInt(value));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading user data from file: " + e.getMessage());
+        }
+    }
     public void UpdateShop(ActionEvent actionEvent) {
     }
 
