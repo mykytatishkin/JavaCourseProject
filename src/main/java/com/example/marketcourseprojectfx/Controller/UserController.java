@@ -278,6 +278,15 @@ public class UserController {
 
                 // Обновляем отображение списка элементов в CartList
                 CartList.setItems(cartItems);
+
+                // Увеличиваем количество продукта на 1 в базе данных
+                Product product = db.GetProductByName(selectedItem);
+                if (product != null) {
+                    db.UpdateProductQuantity(product.getId(), product.getQuantity() + 1);
+                    System.out.println("Quantity updated for product: " + product.getName());
+                } else {
+                    System.out.println("Product not found: " + selectedItem);
+                }
             } else {
                 System.out.println("Item not found in cart.");
             }
