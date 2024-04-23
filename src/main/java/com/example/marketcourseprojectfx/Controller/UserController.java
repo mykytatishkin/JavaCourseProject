@@ -251,4 +251,44 @@ public class UserController {
     }
 
 
+    public void CancelFromCart(ActionEvent actionEvent) {
+        // Получаем выбранный элемент из CartList
+        String selectedItem = (String) CartList.getSelectionModel().getSelectedItem();
+
+        // Проверяем, выбран ли элемент
+        if (selectedItem != null) {
+            // Получаем список элементов в CartList
+            ObservableList<String> cartItems = CartList.getItems();
+
+            // Находим последнее вхождение выбранного элемента в списке
+            int lastIndex = cartItems.lastIndexOf(selectedItem);
+
+            // Проверяем, найдено ли последнее вхождение
+            if (lastIndex != -1) {
+                // Удаляем элемент по индексу
+                cartItems.remove(lastIndex);
+
+                // Перезаписываем файл cart.txt с обновленным списком элементов
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter("cart.txt"))) {
+                    for (String item : cartItems) {
+                        writer.write(item);
+                        writer.newLine();
+                    }
+                } catch (IOException e) {
+                    System.err.println("Error writing to cart file: " + e.getMessage());
+                }
+
+                // Обновляем отображение списка элементов в CartList
+                CartList.setItems(cartItems);
+            } else {
+                System.out.println("Item not found in cart.");
+            }
+        } else {
+            System.out.println("No item selected.");
+        }
+    }
+
+
+    public void BuyFromCart(ActionEvent actionEvent) {
+    }
 }
