@@ -113,6 +113,75 @@ public class DbController {
         }
         return shops;
     }
+    public List<Shop> GetAllShopsOrderedById() {
+        String query = "SELECT * FROM Shop order by Id";
+        List<Shop> shops = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(connectionUrl);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            // Process the result set
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String address = resultSet.getString("address");
+                String email = resultSet.getString("email");
+
+                // Create a new Shop object
+                Shop shop = new Shop(name, address, email);
+                shops.add(shop);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return shops;
+    }
+    public List<Shop> GetAllShopsOrderedByAddress() {
+        String query = "SELECT * FROM Shop order by Address";
+        List<Shop> shops = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(connectionUrl);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            // Process the result set
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String address = resultSet.getString("address");
+                String email = resultSet.getString("email");
+
+                // Create a new Shop object
+                Shop shop = new Shop(name, address, email);
+                shops.add(shop);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return shops;
+    }
+    public List<Shop> GetAllShopsOrderedByEmail() {
+        String query = "SELECT * FROM Shop order by Email";
+        List<Shop> shops = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(connectionUrl);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            // Process the result set
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String address = resultSet.getString("address");
+                String email = resultSet.getString("email");
+
+                // Create a new Shop object
+                Shop shop = new Shop(name, address, email);
+                shops.add(shop);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return shops;
+    }
     public List<Product> GetProductsForShop(String shopName) {
         List<Product> products = new ArrayList<>();
         String query = "SELECT * FROM Product WHERE OwnerId IN (SELECT id FROM shop WHERE name = ?)";

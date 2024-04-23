@@ -51,8 +51,6 @@ public class UserController {
         CartList.setItems(cartItems);
     }
 
-
-
     public void LoadShops() throws IOException {
         List<Shop> shops = db.GetAllShops();
         List<String> shopNames = new ArrayList<>();
@@ -142,8 +140,6 @@ public class UserController {
         return false;
     }
 
-
-
     private boolean isUserMatches(String cartUserLine) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader("user.txt"))) {
             String userLine = reader.readLine();
@@ -187,5 +183,32 @@ public class UserController {
     }
 
     public void CommentItem(ActionEvent actionEvent) {
+    }
+
+    public void OrderShopsById(ActionEvent actionEvent) {
+        List<Shop> shops = db.GetAllShopsOrderedById();
+        List<String> shopNames = new ArrayList<>();
+        for (Shop shop : shops) {
+            shopNames.add(shop.getName());
+        }
+        ShopList.setItems(FXCollections.observableArrayList(shopNames));
+    }
+
+    public void OrderShopsByAddress(ActionEvent actionEvent) {
+        List<Shop> shops = db.GetAllShopsOrderedByAddress();
+        List<String> shopNames = new ArrayList<>();
+        for (Shop shop : shops) {
+            shopNames.add(shop.getName());
+        }
+        ShopList.setItems(FXCollections.observableArrayList(shopNames));
+    }
+
+    public void OrderShopsByEmail(ActionEvent actionEvent) {
+        List<Shop> shops = db.GetAllShopsOrderedByEmail();
+        List<String> shopNames = new ArrayList<>();
+        for (Shop shop : shops) {
+            shopNames.add(shop.getName());
+        }
+        ShopList.setItems(FXCollections.observableArrayList(shopNames));
     }
 }
