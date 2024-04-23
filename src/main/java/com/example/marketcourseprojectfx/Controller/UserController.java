@@ -6,7 +6,9 @@ import com.example.marketcourseprojectfx.Model.Users;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 
 import java.io.*;
 import java.util.List;
@@ -196,8 +198,30 @@ public class UserController {
         return product.getId();
     }
 
-    public void CommentItem(ActionEvent actionEvent) {
+    public void CommentItem(ActionEvent actionEvent) throws IOException {
+        String selectedProduct = (String) ProductList.getSelectionModel().getSelectedItem();
+        Product product = db.GetProductByName(selectedProduct);
+        writeCommentToFile(product.getId(), product.getName());
+        cp.ChangePage(actionEvent, "Comment");
+    }
 
+    private void writeCommentToFile(int productId, String productName) {
+        clearCommentFile(); // Очистка файла перед записью новых данных
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Comment.txt"))) {
+            writer.write("[" + productId + "] " + productName); // Запись в формате [ID] Name
+            writer.newLine();
+        } catch (IOException e) {
+            System.err.println("Error writing to Comment.txt file: " + e.getMessage());
+        }
+    }
+
+
+    private void clearCommentFile() {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("Comment.txt"))) {
+            writer.print(""); // Перезапись файла пустой строкой
+        } catch (IOException e) {
+            System.err.println("Error clearing Comment.txt file: " + e.getMessage());
+        }
     }
 
     public void OrderShopsById(ActionEvent actionEvent) {
@@ -226,4 +250,6 @@ public class UserController {
         }
         ShopList.setItems(FXCollections.observableArrayList(shopNames));
     }
+
+
 }
