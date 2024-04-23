@@ -4,7 +4,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="457.0" prefWidth="671.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.marketcourseprojectfx.Controller.UserController">
+<AnchorPane prefHeight="457.0" prefWidth="723.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.marketcourseprojectfx.Controller.UserController">
    <children>
       <Button layoutX="545.0" layoutY="352.0" mnemonicParsing="false" onAction="#LogOut" text="Log Out" />
       <ListView fx:id="ShopList" layoutX="7.0" layoutY="23.0" prefHeight="355.0" prefWidth="260.0" />
@@ -12,9 +12,11 @@
       <Button layoutX="548.0" layoutY="23.0" mnemonicParsing="false" onAction="#BuyItem" text="Buy" />
       <Button layoutX="546.0" layoutY="56.0" mnemonicParsing="false" onAction="#RateItem" text="Rate" />
       <Button layoutX="546.0" layoutY="89.0" mnemonicParsing="false" onAction="#CommentItem" text="Comment" />
-      <ListView fx:id="CartList" layoutX="545.0" layoutY="133.0" prefHeight="208.0" prefWidth="118.0" />
+      <ListView fx:id="CartList" layoutX="545.0" layoutY="133.0" prefHeight="208.0" prefWidth="173.0" />
       <Button layoutX="14.0" layoutY="391.0" mnemonicParsing="false" onAction="#OrderShopsById" text="By Id" />
       <Button layoutX="68.0" layoutY="391.0" mnemonicParsing="false" onAction="#OrderShopsByAddress" text="By Address" />
       <Button layoutX="154.0" layoutY="391.0" mnemonicParsing="false" onAction="#OrderShopsByEmail" text="By Email" />
+      <Button layoutX="683.0" layoutY="352.0" mnemonicParsing="false" onAction="#CancelFromCart" text="X" />
+      <Button layoutX="642.0" layoutY="352.0" mnemonicParsing="false" onAction="#BuyFromCart" text="Buy" />
    </children>
 </AnchorPane>
