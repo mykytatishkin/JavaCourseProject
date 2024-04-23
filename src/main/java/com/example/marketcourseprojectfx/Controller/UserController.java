@@ -1,6 +1,4 @@
 package com.example.marketcourseprojectfx.Controller;
-
-import com.example.marketcourseprojectfx.Controller.DbController;
 import com.example.marketcourseprojectfx.Extension.ChangePage;
 import com.example.marketcourseprojectfx.Model.Product;
 import com.example.marketcourseprojectfx.Model.Shop;
@@ -180,9 +178,11 @@ public class UserController {
     }
 
     public void RateItem(ActionEvent actionEvent) {
+
     }
 
     public void CommentItem(ActionEvent actionEvent) {
+
     }
 
     public void OrderShopsById(ActionEvent actionEvent) {

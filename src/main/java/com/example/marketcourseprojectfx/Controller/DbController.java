@@ -1,10 +1,7 @@
 package com.example.marketcourseprojectfx.Controller;
-import com.example.marketcourseprojectfx.Extension.ChangePage;
 import com.example.marketcourseprojectfx.Model.Product;
 import com.example.marketcourseprojectfx.Model.Shop;
 import com.example.marketcourseprojectfx.Model.Users;
-
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -182,6 +179,7 @@ public class DbController {
         }
         return shops;
     }
+
     public List<Product> GetProductsForShop(String shopName) {
         List<Product> products = new ArrayList<>();
         String query = "SELECT * FROM Product WHERE OwnerId IN (SELECT id FROM shop WHERE name = ?)";
@@ -253,5 +251,8 @@ public class DbController {
         } catch (SQLException e) {
             System.err.println("Error updating product quantity: " + e.getMessage());
         }
+    }
+    public void UpdateProductRating(int productId, int rating) {
+
     }
 }
