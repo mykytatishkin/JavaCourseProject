@@ -6,9 +6,7 @@ import com.example.marketcourseprojectfx.Model.Users;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.io.*;
 import java.util.List;
@@ -288,7 +286,27 @@ public class UserController {
         }
     }
 
-
     public void BuyFromCart(ActionEvent actionEvent) {
+        // Получаем выбранный элемент из CartList
+        String selectedItem = (String) CartList.getSelectionModel().getSelectedItem();
+
+        // Проверяем, выбран ли элемент
+        if (selectedItem != null) {
+            // Создаем диалоговое окно подтверждения
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation of buying");
+            alert.setHeaderText("Are you sure you want to buy \"" + selectedItem + "\"?");
+            alert.setContentText("After confirmation, you won`t be able to cancel that action.");
+
+            // Отображаем диалоговое окно и ждем реакции пользователя
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    // Удаляем выбранный элемент из списка
+                    CartList.getItems().remove(selectedItem);
+                }
+            });
+        } else {
+            System.out.println("No item selected.");
+        }
     }
 }
