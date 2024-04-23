@@ -8,9 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ListView;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -68,7 +66,6 @@ public class UserController {
         });
     }
 
-
     public void setUserDataFromTextFile() {
         try (BufferedReader reader = new BufferedReader(new FileReader("user.txt"))) {
             String line;
@@ -104,6 +101,28 @@ public class UserController {
     }
 
     public void BuyItem(ActionEvent actionEvent) {
+        // Получаем выбранный продукт из ProductList
+        String selectedProduct = (String) ProductList.getSelectionModel().getSelectedItem();
+
+        // Получаем информацию о продукте из базы данных
+        Product product = db.GetProductByName(selectedProduct);
+
+        if (product != null && product.getQuantity() > 0) {
+            // Уменьшаем количество продукта на 1 в базе данных
+            db.UpdateProductQuantity(product.getId(), product.getQuantity() - 1);
+
+            // Добавляем информацию о покупке в файл cart.txt
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("cart.txt", true))) {
+                // Записываем информацию в формате "id_пользователя,название_продукта"
+                writer.write(product.getName());
+                writer.newLine();
+                writer.flush();
+            } catch (IOException e) {
+                System.err.println("Error writing to cart file: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Product is not available or out of stock.");
+        }
     }
 
     public void RateItem(ActionEvent actionEvent) {

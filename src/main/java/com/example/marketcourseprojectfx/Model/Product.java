@@ -8,13 +8,20 @@ public class Product {
     private int quantity;
     private int ownerId;
 
-    public Product(String productName, String productDescription, int productQuantity, int ownerId) {
+    public Product(int productId, String productName, String productDescription, int productQuantity, int ownerId) {
+        this.id = productId;
         this.name = productName;
         this.description = productDescription;
         this.quantity = productQuantity;
         this.ownerId = ownerId;
     }
 
+    public Product(String productName, String productDescription, int productQuantity, int ownerId) {
+        this.name = productName;
+        this.description = productDescription;
+        this.quantity = productQuantity;
+        this.ownerId = ownerId;
+    }
 
     // Геттеры и сеттеры для всех полей
 

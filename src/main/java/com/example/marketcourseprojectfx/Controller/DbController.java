@@ -143,5 +143,46 @@ public class DbController {
 
         return products;
     }
+    public Product GetProductByName(String productName) {
+        // Запрос к базе данных для получения продукта по его имени
+        String query = "SELECT * FROM product WHERE name = ?";
 
+        try (Connection connection = DriverManager.getConnection(connectionUrl);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            // Устанавливаем параметры запроса
+            statement.setString(1, productName);
+
+            // Выполняем запрос
+            ResultSet resultSet = statement.executeQuery();
+
+            // Проверяем, есть ли результат
+            if (resultSet.next()) {
+                // Если есть, создаем объект Product и заполняем его данными из базы данных
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String description = resultSet.getString("description");
+                int quantity = resultSet.getInt("quantity");
+                int ownerId = resultSet.getInt("OwnerId");
+
+                return new Product(id, name, description, quantity, ownerId);
+            } else {
+                // Если продукт с указанным именем не найден, возвращаем null
+                return null;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting product by name: " + e.getMessage());
+            return null;
+        }
+    }
+    public void UpdateProductQuantity(int productId, int newQuantity) {
+        try (Connection connection = DriverManager.getConnection(connectionUrl);
+             PreparedStatement statement = connection.prepareStatement("UPDATE product SET quantity = ? WHERE id = ?")) {
+            statement.setInt(1, newQuantity);
+            statement.setInt(2, productId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error updating product quantity: " + e.getMessage());
+        }
+    }
 }
