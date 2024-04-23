@@ -252,7 +252,19 @@ public class DbController {
             System.err.println("Error updating product quantity: " + e.getMessage());
         }
     }
-    public void UpdateProductRating(int productId, int rating) {
+    public void IncreaseProductRating(int productId) {
+        String query = "UPDATE Product SET Rating = Rating + 1 WHERE Id = ?";
 
+        try (Connection connection = DriverManager.getConnection(connectionUrl);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, productId);
+            statement.executeUpdate();
+            System.out.println("Рейтинг продукта успешно обновлен.");
+
+        } catch (SQLException e) {
+            System.out.println("Ошибка при обновлении рейтинга продукта: " + e.getMessage());
+        }
     }
+
 }

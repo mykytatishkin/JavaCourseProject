@@ -177,8 +177,23 @@ public class UserController {
         }
     }
 
-    public void RateItem(ActionEvent actionEvent) {
+    public void RateItem(ActionEvent actionEvent) throws IOException {
+        // Получаем id продукта из ProductList
+        int productId = getProductIdFromProductList();
+        // Увеличиваем рейтинг продукта на 1 в базе данных
+        db.IncreaseProductRating(productId);
+        // Обновляем отображение списка продуктов
+        LoadProducts();
+    }
 
+    // Метод для получения id продукта из ProductList
+    private int getProductIdFromProductList() {
+        // Получаем выбранный продукт из списка
+        String selectedProduct = (String) ProductList.getSelectionModel().getSelectedItem();
+        // Получаем объект продукта по его имени
+        Product product = db.GetProductByName(selectedProduct);
+        // Возвращаем id продукта
+        return product.getId();
     }
 
     public void CommentItem(ActionEvent actionEvent) {
