@@ -215,7 +215,6 @@ public class UserController {
         }
     }
 
-
     private void clearCommentFile() {
         try (PrintWriter writer = new PrintWriter(new FileWriter("Comment.txt"))) {
             writer.print(""); // Перезапись файла пустой строкой
