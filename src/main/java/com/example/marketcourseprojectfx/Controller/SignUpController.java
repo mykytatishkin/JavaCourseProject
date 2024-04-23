@@ -1,17 +1,9 @@
 package com.example.marketcourseprojectfx.Controller;
 
-import com.example.marketcourseprojectfx.HelloApplication;
-import com.example.marketcourseprojectfx.Model.Users;
+import com.example.marketcourseprojectfx.Extension.ChangePage;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
-
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class SignUpController
 {
@@ -22,72 +14,45 @@ public class SignUpController
     public CheckBox AgreeWithPoliticsCheckBox;
     public Label errorTitleSignUp;
     public Button HaveAnAccount;
-    private DbController dbController = new DbController();
 
-    public void SignUp(ActionEvent actionEvent) {
+    private DbController dbController = new DbController();
+    private ChangePage cp = new ChangePage();
+
+    public void SignUp(ActionEvent actionEvent) throws IOException {
         String username = UsernameSignUpField.getText();
         String password = PasswordSignUpField.getText();
         String confirmPassword = ConfirmPasswordSignUpField.getText();
 
+        // Проверка, что пароль и его подтверждение совпадают
         if (!password.equals(confirmPassword)) {
-            errorTitleSignUp.setText("Password does not match Confirm Password");
+            errorTitleSignUp.setText("Passwords don't match");
             return;
         }
 
-        if (username.length() < 2) {
-            errorTitleSignUp.setText("Username should contain at least two characters");
+        // Проверка, что пользователь с таким именем не существует
+        if (dbController.GetUser(username, password) != null) {
+            errorTitleSignUp.setText("User already exists");
             return;
         }
 
+        // Проверка, что чекбокс "Согласен с политикой" отмечен
         if (!AgreeWithPoliticsCheckBox.isSelected()) {
-            errorTitleSignUp.setText("Please agree with the policies");
+            errorTitleSignUp.setText("You must agree with the politics");
             return;
         }
 
-        if (password.length() < 2 || confirmPassword.length() < 2) {
-            errorTitleSignUp.setText("Password should contain at least 2 characters");
-            return;
-        }
-
-        try {
-            dbController.Connect();
-            if (dbController.getUser(username) != null) {
-                errorTitleSignUp.setText("User with this username already exists");
-                return;
-            }
-            Users user = new Users(0, username, password, "user", 1);
-
-            dbController.addUser(user);
-
-            errorTitleSignUp.setText("User registered successfully");
-
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("Login.fxml"));
-            Parent root = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
-
-            ((Node) (actionEvent.getSource())).getScene().getWindow().hide();
-
-        } catch (SQLException e) {
-            errorTitleSignUp.setText("Error occurred during user registration");
-            e.printStackTrace();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            dbController.Disconnect();
+        // Регистрация нового пользователя
+        if (dbController.RegisterUser(username, password)) {
+            errorTitleSignUp.setText("Registration successful");
+            // Опционально: переход на страницу входа после успешной регистрации
+            cp.ChangePage(actionEvent, "Login");
+        } else {
+            errorTitleSignUp.setText("Error registering user");
         }
     }
 
-
     public void HaveAnAccount(ActionEvent actionEvent) throws IOException
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("Login.fxml"));
-        Parent root = fxmlLoader.load();
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.show();
-
-        ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+        cp.ChangePage(actionEvent,"Login");
     }
 }

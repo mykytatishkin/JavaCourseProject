@@ -52,29 +52,6 @@
                         </children>
                     </AnchorPane>
                 </Tab>
-                <Tab fx:id="usersTab" text="Profile">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                            <children>
-                                <TextField fx:id="PasswordField" layoutX="139.0" layoutY="72.0" prefHeight="25.0" prefWidth="110.0" promptText="Password" />
-                                <Button layoutX="140.0" layoutY="245.0" mnemonicParsing="false" onAction="#UpdateProfile" text="Update" />
-                                <Button layoutX="524.0" layoutY="427.0" mnemonicParsing="false" onAction="#LogOut" text="Log Out" />
-                        <Label layoutX="23.0" layoutY="48.0" text="Username" />
-                        <Label fx:id="UsernameLabel" layoutX="139.0" layoutY="48.0" text="Label" />
-                        <Label layoutX="24.0" layoutY="76.0" text="Password" />
-                        <TextField fx:id="ConfirmPasswordField" layoutX="261.0" layoutY="72.0" prefHeight="25.0" prefWidth="110.0" promptText="Confirm Password" />
-                        <Label layoutX="26.0" layoutY="107.0" text="First Name" />
-                        <Label layoutX="26.0" layoutY="142.0" text="Last Name" />
-                        <Label layoutX="26.0" layoutY="174.0" text="Email" />
-                        <Label layoutX="24.0" layoutY="205.0" text="Phone" />
-                        <TextField fx:id="FirstNameField" layoutX="139.0" layoutY="103.0" prefHeight="25.0" prefWidth="110.0" promptText="First Name" />
-                        <TextField fx:id="LastNameField" layoutX="139.0" layoutY="138.0" prefHeight="25.0" prefWidth="110.0" promptText="Last Name" />
-                        <TextField fx:id="EmailField" layoutX="139.0" layoutY="170.0" prefHeight="25.0" prefWidth="110.0" promptText="Email" />
-                        <TextField fx:id="PhoneField" layoutX="139.0" layoutY="201.0" prefHeight="25.0" prefWidth="110.0" promptText="Phone" />
-                            </children>
-                        </AnchorPane>
-                    </content>
-                </Tab>
             </tabs>
         </TabPane>
     </children>

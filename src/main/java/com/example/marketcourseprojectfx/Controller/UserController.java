@@ -1,13 +1,7 @@
 package com.example.marketcourseprojectfx.Controller;
-
-import com.example.marketcourseprojectfx.HelloApplication;
+import com.example.marketcourseprojectfx.Extension.ChangePage;
 import com.example.marketcourseprojectfx.Model.Users;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -15,6 +9,7 @@ public class UserController {
 
     // Data Binding
     private Users userData;
+    private ChangePage cp = new ChangePage();
 
     public void setUserData(Users user) {
         if (user != null) {
@@ -26,13 +21,8 @@ public class UserController {
     }
 
     public void LogOut(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("Login.fxml"));
-        Parent root = fxmlLoader.load();
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.show();
-
-        // Закройте предыдущее окно входа
-        ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+        cp.ChangePage(actionEvent,"SignUp");
     }
+
+
 }

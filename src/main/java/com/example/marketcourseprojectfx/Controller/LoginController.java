@@ -1,17 +1,11 @@
 package com.example.marketcourseprojectfx.Controller;
-
-import com.example.marketcourseprojectfx.HelloApplication;
+import com.example.marketcourseprojectfx.Extension.ChangePage;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-import com.example.marketcourseprojectfx.Model.Users;
 import java.io.IOException;
+import java.util.Locale;
 
 public class LoginController {
     public TextField UsernameField;
@@ -19,87 +13,39 @@ public class LoginController {
     public Button LoginButton;
     public Button SignUpButton;
     public Label ErrorTitle;
+
     private DbController dbController = new DbController();
+    private ChangePage cp = new ChangePage();
 
     public void initialize() {
         dbController.Connect();
     }
 
-    public void Login(ActionEvent actionEvent) {
-        String username = UsernameField.getText();
-        String password = PasswordField.getText();
+    public void Login(ActionEvent actionEvent) throws IOException {
+        var authResult = dbController.GetUser(UsernameField.getText(), PasswordField.getText());
 
-        if (username.length() > 1 && password.length() > 1) {
-            Users user = dbController.getUser(username, password);
-
-            if (user != null) {
-                String role = user.getRole();
-                String fxmlPath = "";
-
-                switch (role) {
-                    case "admin":
-                        fxmlPath = "Admin.fxml";
-                        break;
-                    case "manager":
-                        fxmlPath = "Manager.fxml";
-                        break;
-                    case "user":
-                        fxmlPath = "User.fxml";
-                        break;
-                    default:
-                        ErrorTitle.setText("Invalid Role");
-                        return;
-                }
-
-                try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(fxmlPath));
-                    Parent root = fxmlLoader.load();
-                    Stage stage = new Stage();
-                    stage.setScene(new Scene(root));
-
-                    switch (fxmlPath)
-                    {
-                        case "Admin.fxml":
-                            AdminController adminController = fxmlLoader.getController();
-                            adminController.setUserData(user);
-                            break;
-                        case "Manager.fxml":
-                            ManagerController managerController = fxmlLoader.getController();
-                            managerController.setUserData(user);
-                            break;
-                        case "User.fxml":
-                            UserController userController = fxmlLoader.getController();
-                            userController.setUserData(user);
-                            break;
-                    }
-
-                    stage.show();
-
-                    ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                ErrorTitle.setText("Invalid Credentials");
+        if (authResult != null) {
+            switch (authResult.getRole().toLowerCase(Locale.ROOT)) {
+                case "admin":
+                    cp.ChangePage(actionEvent, "SignUp");
+                    break;
+                case "user":
+                    cp.ChangePage(actionEvent, "User");
+                    break;
+                case "manager":
+                    cp.ChangePage(actionEvent, "Manager");
+                    break;
+                default:
+                    System.out.println(authResult.getRole());
+                    break;
             }
         } else {
-            ErrorTitle.setText("Null Credentials");
+            System.out.println("Authentication failed.");
         }
     }
 
-
-    public void SignUp(ActionEvent actionEvent) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("SignUp.fxml"));
-            Parent root = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
-
-            ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void SignUp(ActionEvent actionEvent) throws IOException {
+        cp.ChangePage(actionEvent,"SignUp");
     }
 }
 
