@@ -288,4 +288,38 @@ public class DbController {
             System.err.println("Error saving comment to the database: " + e.getMessage());
         }
     }
+    // Метод для получения всех комментариев по заданному productId
+    public List<Comment> getCommentsByProductId(int productId) throws SQLException {
+        List<Comment> comments = new ArrayList<>();
+        String query = "SELECT * FROM comment WHERE productId = ?";
+
+        try (Connection connection = DriverManager.getConnection(connectionUrl);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            // Устанавливаем значение параметра productId
+            statement.setInt(1, productId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    int commentId = resultSet.getInt("id");
+                    String username = resultSet.getString("username");
+                    String content = resultSet.getString("content");
+
+                    // Создаем объект Comment и добавляем его в список комментариев
+                    Comment comment = new Comment();
+                    comment.setId(commentId);
+                    comment.setProductId(productId);
+                    comment.setUsername(username);
+                    comment.setContent(content);
+
+                    comments.add(comment);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error retrieving comments from the database: " + e.getMessage());
+            throw e; // Пробрасываем SQLException выше, чтобы обработать его в вызывающем коде
+        }
+
+        return comments;
+    }
 }

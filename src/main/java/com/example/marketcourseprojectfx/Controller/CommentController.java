@@ -3,17 +3,23 @@ package com.example.marketcourseprojectfx.Controller;
 import com.example.marketcourseprojectfx.Extension.ChangePage;
 import com.example.marketcourseprojectfx.Model.Comment;
 import com.example.marketcourseprojectfx.Model.Users;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 public class CommentController {
     public Label CommentLabel;
     public TextField CommentContent;
+    public ListView<String> CommentList; // Обратите внимание, что ListView теперь имеет тип String
 
     private DbController db = new DbController();
     private ChangePage cp = new ChangePage();
@@ -24,21 +30,23 @@ public class CommentController {
         try {
             loadCommentData();
             loadUserData();
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             System.err.println("Error loading data: " + e.getMessage());
         }
     }
 
-    private void loadCommentData() throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader("Comment.txt"))) {
-            String line;
-            StringBuilder commentData = new StringBuilder();
-            while ((line = reader.readLine()) != null) {
-                commentData.append(line);
-                commentData.append("\n");
-            }
-            CommentLabel.setText(commentData.toString());
+    private void loadCommentData() throws IOException, SQLException {
+        // Получаем комментарии из базы данных по текущему productId
+        List<Comment> comments = db.getCommentsByProductId(getProductIdFromCommentFile());
+        ObservableList<String> commentStrings = FXCollections.observableArrayList();
+
+        for (Comment comment : comments) {
+            // Форматируем каждый комментарий в соответствии с требуемым форматом [Username] Content
+            String formattedComment = "[" + comment.getUsername() + "] " + comment.getContent();
+            commentStrings.add(formattedComment);
         }
+
+        CommentList.setItems(commentStrings); // Устанавливаем отформатированные комментарии в ListView
     }
 
     private void loadUserData() throws IOException {
@@ -66,7 +74,7 @@ public class CommentController {
         }
     }
 
-    public void PostComment(ActionEvent actionEvent) throws IOException {
+    public void PostComment(ActionEvent actionEvent) throws IOException, SQLException {
         String content = CommentContent.getText().trim();
         if (!content.isEmpty()) {
             // Создаем объект комментария
@@ -77,6 +85,9 @@ public class CommentController {
 
             // Сохраняем комментарий в базе данных
             db.saveComment(comment);
+
+            // После сохранения комментария загружаем комментарии для текущего productId
+            loadCommentData();
         } else {
             System.out.println("Comment content cannot be empty.");
         }
