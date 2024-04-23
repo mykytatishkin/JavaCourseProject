@@ -1,4 +1,6 @@
 package com.example.marketcourseprojectfx.Controller;
+
+import com.example.marketcourseprojectfx.Controller.DbController;
 import com.example.marketcourseprojectfx.Extension.ChangePage;
 import com.example.marketcourseprojectfx.Model.Product;
 import com.example.marketcourseprojectfx.Model.Shop;
@@ -12,13 +14,12 @@ import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 
-
 public class UserController {
-
     public ListView ShopList;
     public ListView ProductList;
-    // Data Binding
+    public ListView CartList;
     private Users userData;
+    private String username;
     private DbController db = new DbController();
     private ChangePage cp = new ChangePage();
 
@@ -26,42 +27,46 @@ public class UserController {
         setUserDataFromTextFile();
         LoadShops();
         LoadProducts();
+        LoadCartItems();
+        if (userData != null) {
+            username = userData.getUsername();
+        } else {
+            System.err.println("User data is null.");
+        }
     }
+
+    public void LoadCartItems() {
+        ObservableList<String> cartItems = FXCollections.observableArrayList();
+        try (BufferedReader reader = new BufferedReader(new FileReader("cart.txt"))) {
+            // Пропускаем первую строку
+            reader.readLine();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                cartItems.add(line);
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading cart file: " + e.getMessage());
+        }
+        CartList.setItems(cartItems);
+    }
+
+
 
     public void LoadShops() throws IOException {
         List<Shop> shops = db.GetAllShops();
         List<String> shopNames = new ArrayList<>();
-
-        // Проход по списку магазинов и добавление их имен в список строк
         for (Shop shop : shops) {
             shopNames.add(shop.getName());
         }
-
-        // Создание ObservableList из списка имен магазинов
-        ObservableList<String> shopNamesObservableList = FXCollections.observableArrayList(shopNames);
-
-        // Установка ObservableList с именами магазинов в элемент управления ListView
-        ShopList.setItems(shopNamesObservableList);
+        ShopList.setItems(FXCollections.observableArrayList(shopNames));
     }
 
     public void LoadProducts() throws IOException {
-        // Установка обработчика событий для ListView ShopList
         ShopList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                // Загрузка продуктов для выбранного магазина
-                List<Product> products = db.GetProductsForShop((String) newValue); // Предположим, что у вас есть метод для получения продуктов по имени магазина
-                List<String> productNames = new ArrayList<>();
-
-                // Проход по списку продуктов и добавление их имен в список строк
-                for (Product product : products) {
-                    productNames.add(product.getName());
-                }
-
-                // Создание ObservableList из списка имен продуктов
-                ObservableList<String> productNamesObservableList = FXCollections.observableArrayList(productNames);
-
-                // Установка ObservableList с именами продуктов в элемент управления ListView
-                ProductList.setItems(productNamesObservableList);
+                List<Product> products = db.GetProductsForShop((String)newValue);
+                ProductList.setItems(FXCollections.observableArrayList(products.stream().map(Product::getName).toList()));
             }
         });
     }
@@ -69,24 +74,19 @@ public class UserController {
     public void setUserDataFromTextFile() {
         try (BufferedReader reader = new BufferedReader(new FileReader("user.txt"))) {
             String line;
-            userData = new Users(); // Создаем новый объект Users для userData
+            userData = new Users();
             while ((line = reader.readLine()) != null) {
-                // Разбиваем строку на части по ":"
                 String[] parts = line.split(":");
                 if (parts.length == 2) {
-                    String key = parts[0].trim();
-                    String value = parts[1].trim();
-                    switch (key) {
+                    switch (parts[0].trim()) {
                         case "Username":
-                            userData.setUsername(value);
+                            userData.setUsername(parts[1].trim());
                             break;
                         case "Role":
-                            userData.setRole(value);
+                            userData.setRole(parts[1].trim());
                             break;
                         case "ShopId":
-                            userData.setShopId(Integer.parseInt(value));
-                            break;
-                        default:
+                            userData.setShopId(Integer.parseInt(parts[1].trim()));
                             break;
                     }
                 }
@@ -97,31 +97,89 @@ public class UserController {
     }
 
     public void LogOut(ActionEvent actionEvent) throws IOException {
-        cp.ChangePage(actionEvent,"LogIn");
+        cp.ChangePage(actionEvent, "LogIn");
     }
 
     public void BuyItem(ActionEvent actionEvent) {
-        // Получаем выбранный продукт из ProductList
         String selectedProduct = (String) ProductList.getSelectionModel().getSelectedItem();
-
-        // Получаем информацию о продукте из базы данных
         Product product = db.GetProductByName(selectedProduct);
 
         if (product != null && product.getQuantity() > 0) {
-            // Уменьшаем количество продукта на 1 в базе данных
             db.UpdateProductQuantity(product.getId(), product.getQuantity() - 1);
-
-            // Добавляем информацию о покупке в файл cart.txt
             try (BufferedWriter writer = new BufferedWriter(new FileWriter("cart.txt", true))) {
-                // Записываем информацию в формате "id_пользователя,название_продукта"
-                writer.write(product.getName());
-                writer.newLine();
-                writer.flush();
+                if (userData != null) {
+                    username = userData.getUsername();
+                    if (!isUserAlreadyInCart()) {
+                        writer.write(username);
+                        writer.newLine();
+                    }
+                    writer.write(product.getName());
+                    writer.newLine();
+                } else {
+                    System.err.println("User data is null. Unable to proceed with the purchase.");
+                }
+                // Обновление отображения после каждого купленного предмета
+                LoadCartItems();
             } catch (IOException e) {
                 System.err.println("Error writing to cart file: " + e.getMessage());
             }
         } else {
             System.out.println("Product is not available or out of stock.");
+        }
+    }
+
+    private boolean isUserAlreadyInCart() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("cart.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.trim().equals(userData.getUsername())) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading cart file: " + e.getMessage());
+        }
+        return false;
+    }
+
+
+
+    private boolean isUserMatches(String cartUserLine) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader("user.txt"))) {
+            String userLine = reader.readLine();
+            return getUsernameFromLine(userLine).equals(getUsernameFromLine(cartUserLine));
+        } catch (IOException e) {
+            System.err.println("Error reading user file: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private String getUsernameFromLine(String line) {
+        if (line != null && line.startsWith("Username:")) {
+            return line.split(":")[1].trim();
+        }
+        return null;
+    }
+
+    private boolean isCartEmpty() {
+        File cartFile = new File("cart.txt");
+        return cartFile.exists() && cartFile.length() == 0;
+    }
+
+    private String getFirstLineOfFile(String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            return reader.readLine();
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private void clearCart() {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("cart.txt"))) {
+            writer.print("");
+        } catch (IOException e) {
+            System.err.println("Error clearing cart file: " + e.getMessage());
         }
     }
 
